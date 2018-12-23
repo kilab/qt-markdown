@@ -46,13 +46,15 @@ void MainWindow::on_sourceTextarea_textChanged()
     QRegExp separator("( |\n)");
     QStringList words = editorText.split(separator);
     words.removeAll("");
-
     this->updateStatusBar(editorText.count(), words.count());
 
     // update target editor text
     Parser *parser = new Parser(editorText);
-
     ui->targetTextarea->setHtml(parser->getFormattedText());
+
+    QTextCursor cursor = ui->targetTextarea->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    ui->targetTextarea->setTextCursor(cursor);
 }
 
 void MainWindow::updateStatusBar(int chars, int words)
