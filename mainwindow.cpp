@@ -1,13 +1,12 @@
+#include "helpdialog.h"
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "parser.h"
+#include "ui_mainwindow.h"
 
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPrinter>
-
-const QString APP_NAME = "Qt Markdown";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,7 +27,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionHelp_triggered()
 {
-    this->tempNotImplementedDialog("Help");
+    HelpDialog *helpDialog = new HelpDialog(this);
+    helpDialog->show();
+    helpDialog->raise();
+    helpDialog->activateWindow();
 }
 
 void MainWindow::on_actionSave_HTML_triggered()
@@ -105,9 +107,3 @@ void MainWindow::updateStatusBar(int chars, int words)
 {
     ui->statusBar->showMessage(tr("Characters: %1 | Words: %2").arg(chars).arg(words));
 }
-
-void MainWindow::tempNotImplementedDialog(QString actionName)
-{
-    QMessageBox::information(this, APP_NAME, QString("Action <b>'%1'</b> is not implemented yet.").arg(actionName), QMessageBox::Ok);
-}
-

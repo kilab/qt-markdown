@@ -10,9 +10,6 @@
     <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Qt Markdown</string>
-  </property>
   <property name="windowIcon">
    <iconset theme="format-text-code">
     <normaloff>.</normaloff>.</iconset>

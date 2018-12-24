@@ -28,15 +28,18 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     codeeditor.cpp \
-    parser.cpp
+    parser.cpp \
+    helpdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     codeeditor.h \
-    parser.h
+    parser.h \
+    helpdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    helpdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

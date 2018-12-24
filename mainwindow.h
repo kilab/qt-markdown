@@ -7,6 +7,11 @@ namespace Ui {
 class MainWindow;
 }
 
+const QString APP_NAME = "Qt Markdown";
+const QString APP_VENDOR = "Kilab";
+const QString APP_VERSION = "0.0.0";
+const QString APP_HOMEPAGE_URL = "https://github.com/kilab/qt-markdown";
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,7 +30,6 @@ private:
     Ui::MainWindow *ui;
     QString getSaveFilePath(QString path);
     void updateStatusBar(int chars, int words);
-    void tempNotImplementedDialog(QString actionName);
 };
 
 #endif // MAINWINDOW_H
