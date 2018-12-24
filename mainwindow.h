@@ -23,6 +23,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString getSaveFilePath(QString path);
     void updateStatusBar(int chars, int words);
     void tempNotImplementedDialog(QString actionName);
 };

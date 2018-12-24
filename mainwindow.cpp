@@ -3,7 +3,9 @@
 #include "parser.h"
 
 #include <QDebug>
+#include <QFileDialog>
 #include <QMessageBox>
+#include <QPrinter>
 
 const QString APP_NAME = "Qt Markdown";
 
@@ -31,12 +33,39 @@ void MainWindow::on_actionHelp_triggered()
 
 void MainWindow::on_actionSave_HTML_triggered()
 {
-    this->tempNotImplementedDialog("Save HTML");
+    QString filePath = this->getSaveFilePath("html");
+
+    if (filePath == nullptr) {
+        return;
+    }
+
+    QFile fileToSave(filePath);
+    fileToSave.open(QIODevice::WriteOnly);
+    fileToSave.write(ui->targetTextarea->toHtml().toLocal8Bit());
+    fileToSave.close();
+
+    ui->statusBar->showMessage(tr("Parsed content saved to: %1").arg(filePath));
 }
 
 void MainWindow::on_actionSave_PDF_triggered()
 {
-    this->tempNotImplementedDialog("Save PDF");
+    QString filePath = this->getSaveFilePath("pdf");
+
+    if (filePath == nullptr) {
+        return;
+    }
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFileName(filePath);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPageSize(QPrinter::A4);
+    printer.setPaperSize(QPrinter::A4);
+
+    QTextDocument doc;
+    doc.setHtml(ui->targetTextarea->toHtml());
+    doc.print(&printer);
+
+    ui->statusBar->showMessage(tr("Parsed content saved to: %1").arg(filePath));
 }
 
 void MainWindow::on_sourceTextarea_textChanged()
@@ -57,9 +86,24 @@ void MainWindow::on_sourceTextarea_textChanged()
     ui->targetTextarea->setTextCursor(cursor);
 }
 
+QString MainWindow::getSaveFilePath(QString ext)
+{
+    QFileDialog saveDialog(this, tr("Choose location to save %1 file...").arg(ext.toUpper()));
+    saveDialog.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
+    saveDialog.setDefaultSuffix(ext);
+    saveDialog.setDirectory(QDir::home());
+    saveDialog.setNameFilter(tr("%1 file (*.%2)").arg(ext.toUpper()).arg(ext));
+
+    if (saveDialog.exec()) {
+        return saveDialog.selectedFiles().first();
+    } else {
+        return nullptr;
+    }
+}
+
 void MainWindow::updateStatusBar(int chars, int words)
 {
-    ui->statusBar->showMessage(QString("Characters: %1 | Words: %2").arg(chars).arg(words));
+    ui->statusBar->showMessage(tr("Characters: %1 | Words: %2").arg(chars).arg(words));
 }
 
 void MainWindow::tempNotImplementedDialog(QString actionName)
