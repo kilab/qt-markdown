@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QFont editorsFont("Consolas, 'Fira Mono', 'Source Code Pro', Monospace", 10);
     ui->sourceTextarea->setFont(editorsFont);
     ui->targetTextarea->setFont(editorsFont);
+
+    ui->targetTextarea->setOpenExternalLinks(true);
 }
 
 MainWindow::~MainWindow()

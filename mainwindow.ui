@@ -26,7 +26,7 @@
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QTextEdit" name="targetTextarea">
+      <widget class="QTextBrowser" name="targetTextarea">
        <property name="styleSheet">
         <string notr="true"/>
        </property>
