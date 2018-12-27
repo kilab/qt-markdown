@@ -15,9 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle(APP_NAME);
 
-    QFont editorsFont("Consolas, 'Fira Mono', 'Source Code Pro', Monospace", 10);
-    ui->sourceTextarea->setFont(editorsFont);
-    ui->targetTextarea->setFont(editorsFont);
+    QFont sourceTextareaFont("Consolas, 'Fira Mono', 'Source Code Pro', Monospace", 10);
+    QFont targetTextareaFont("'Linux Libertine', Georgia, sans-serif", 11);
+
+    ui->sourceTextarea->setFont(sourceTextareaFont);
+    ui->targetTextarea->setFont(targetTextareaFont);
 
     ui->targetTextarea->setOpenExternalLinks(true);
 }
