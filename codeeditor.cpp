@@ -58,8 +58,8 @@ void CodeEditor::highlightCurrentLine()
 
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
-
-        QColor lineColor = QColor(Qt::white).darker(105);
+        QColor baseThemeColor = QApplication::palette(this).base().color();
+        QColor lineColor = (this->isBrightTheme()) ? QColor(baseThemeColor).darker(150) : QColor(baseThemeColor).lighter(150);
 
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -74,7 +74,13 @@ void CodeEditor::highlightCurrentLine()
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(Qt::white).darker(105));
+    QColor baseThemeColor = QApplication::palette(this).base().color();
+
+    if (this->isBrightTheme()) {
+        painter.fillRect(event->rect(), QColor(baseThemeColor).darker(105));
+    } else {
+        painter.fillRect(event->rect(), QColor(baseThemeColor).lighter(150));
+    }
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -84,7 +90,13 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
+
+            if (this->isBrightTheme()) {
+                painter.setPen(Qt::darkGray);
+            } else {
+                painter.setPen(Qt::lightGray);
+            }
+
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 
@@ -93,4 +105,12 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         bottom = top + (int) blockBoundingRect(block).height();
         ++blockNumber;
     }
+}
+
+bool CodeEditor::isBrightTheme()
+{
+    QPalette themePalette = QApplication::palette(this);
+    QColor baseColor = themePalette.base().color();
+
+    return (baseColor.redF() * 0.299 + baseColor.green() * 0.587 + baseColor.blue() * 0.114) > 186;
 }

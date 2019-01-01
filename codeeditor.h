@@ -24,6 +24,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    bool isBrightTheme();
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
