@@ -20,6 +20,7 @@ private:
 
     QString getAboutContent();
     QString getSyntaxContent();
+    bool isBrightTheme();
 };
 
 #endif // HELPDIALOG_H

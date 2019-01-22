@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle(APP_NAME);
 
     QFont sourceTextareaFont("Consolas, 'Fira Mono', 'Source Code Pro', Monospace", 10);
-    QFont targetTextareaFont("'Linux Libertine', Georgia, sans-serif", 11);
+    QFont targetTextareaFont("'Linux Libertine', Georgia, sans-serif", 10);
 
     ui->sourceTextarea->setFont(sourceTextareaFont);
     ui->targetTextarea->setFont(targetTextareaFont);
@@ -86,10 +86,6 @@ void MainWindow::on_sourceTextarea_textChanged()
     // update target editor text
     Parser *parser = new Parser(editorText);
     ui->targetTextarea->setHtml(parser->getFormattedText());
-
-    QTextCursor cursor = ui->targetTextarea->textCursor();
-    cursor.movePosition(QTextCursor::End);
-    ui->targetTextarea->setTextCursor(cursor);
 }
 
 QString MainWindow::getSaveFilePath(QString ext)

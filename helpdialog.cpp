@@ -55,7 +55,8 @@ QString HelpDialog::getAboutContent()
 
 QString HelpDialog::getSyntaxContent()
 {
-    QString content = "<style>pre { background: #fcfcfc; border: 2px solid #f6f6f6; padding: 8px; } </style>";
+    QString preBlockBackgroundColor = this->isBrightTheme() ? "#fcfcfc" : "#494949";
+    QString content = QString("<style>pre { background: %1; border: 2px solid #f6f6f6; padding: 8px; } </style>").arg(preBlockBackgroundColor);
 
     content.append("<h3>Emphasis</h3>");
     content.append("<pre>");
@@ -75,4 +76,12 @@ QString HelpDialog::getSyntaxContent()
     content.append("More examples will be added in future..");
 
     return content;
+}
+
+bool HelpDialog::isBrightTheme()
+{
+    QPalette themePalette = QApplication::palette(this);
+    QColor baseColor = themePalette.base().color();
+
+    return (baseColor.redF() * 0.299 + baseColor.green() * 0.587 + baseColor.blue() * 0.114) > 186;
 }

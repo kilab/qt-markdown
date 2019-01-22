@@ -33,12 +33,13 @@ void Parser::parseText()
     regexRules.append(QPair<QString, QString>("__(.*)__", "<b>\\1</b>")); // bold
     regexRules.append(QPair<QString, QString>("\\*(.*)\\*", "<i>\\1</i>")); // italic / emphasis
     regexRules.append(QPair<QString, QString>("_(.*)_", "<i>\\1</i>")); // italic / emphasis
-    regexRules.append(QPair<QString, QString>("`(.*?)`", "<code>\\1</code>")); // strike / deleted
+    regexRules.append(QPair<QString, QString>("`(.*?)`", "<code>\\1</code>")); // inline code
+    regexRules.append(QPair<QString, QString>("```\n(.*?)\n```", "\n<pre>\\1</pre>")); // block code
     regexRules.append(QPair<QString, QString>("\\~\\~(.*)\\~\\~", "<s>\\1</s>")); // strike / deleted
     regexRules.append(QPair<QString, QString>("\\[([^\\[]+)\\]\\(([^\\)]+)\\)", "<a href=\"\\2\">\\1</a>")); // link
     regexRules.append(QPair<QString, QString>("\n-{3,}", "\n<hr />")); // horizontal rule
-    regexRules.append(QPair<QString, QString>("\n\\*(.*)", "ruleUl")); // ul lists
-    regexRules.append(QPair<QString, QString>("\n[0-9]+\\.(.*)", "ruleOl")); // ol lists
+    regexRules.append(QPair<QString, QString>("^\\*(.*)", "ruleUl")); // ul lists
+    regexRules.append(QPair<QString, QString>("^[0-9]+\\.(.*)", "ruleOl")); // ol lists
     regexRules.append(QPair<QString, QString>("\n([^\n]+)\n", "ruleParagraphs")); // paragraph
 
     for (int i = 0; i < regexRules.count(); i++) {
@@ -92,10 +93,28 @@ void Parser::ruleOl(QString regexRule)
 
 void Parser::ruleParagraphs(QString regexRule)
 {
+    QRegularExpression regex(regexRule);
+    QRegularExpressionMatchIterator iterator(regex.globalMatch(this->formattedText));
 
+    while (iterator.hasNext()) {
+        QRegularExpressionMatch match = iterator.next();
+        QString toReplace = QString("<p>%1</p>").arg(match.captured(1));
+
+        this->formattedText.replace(match.captured(0), toReplace);
+    }
 }
 
 void Parser::ruleUl(QString regexRule)
 {
+    QRegularExpression regex(regexRule);
+    QRegularExpressionMatchIterator iterator(regex.globalMatch(this->formattedText));
+    QString contentToReplace = QString("<ul>\n");
 
+    while (iterator.hasNext()) {
+        QRegularExpressionMatch match = iterator.next();
+        contentToReplace += QString("<li>%1</li>").arg(match.captured(1));
+    }
+
+    contentToReplace += "</ul>\n";
+    this->formattedText.replace(regex, contentToReplace);
 }
